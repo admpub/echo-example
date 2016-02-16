@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/admpub/echo"
 	"github.com/admpub/echo/engine/fasthttp"
 	"github.com/admpub/echo/engine/standard"
@@ -13,7 +15,10 @@ func main() {
 	e := echo.New()
 	e.Use(mw.Log())
 	e.Get("/", echo.HandlerFunc(func(c echo.Context) error {
-		return c.String(200, "Hello, World!")
+		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
+	}))
+	e.Post("/", echo.HandlerFunc(func(c echo.Context) error {
+		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
 	}))
 	e.Get("/v2", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "Echo v2")
