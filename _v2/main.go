@@ -13,6 +13,14 @@ func main() {
 	engine := "fasthttp"
 
 	e := echo.New()
+	e.Use(echo.MiddlewareFunc(func(h echo.Handler) echo.Handler {
+		return echo.HandlerFunc(func(c echo.Context) error {
+			fmt.Println(`==========before===========`)
+			err := h.Handle(c)
+			fmt.Println(`===========after===========`)
+			return err
+		})
+	}))
 	e.Use(mw.Log())
 	e.Get("/", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
