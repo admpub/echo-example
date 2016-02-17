@@ -10,10 +10,12 @@ import (
 )
 
 func main() {
-	engine := "fasthttp"
+	engine := "default"
 
 	e := echo.New()
 	e.Use(mw.Log())
+	e.Use(mw.Recover())
+	//e.Use(mw.Gzip())
 	e.Get("/", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
 	}))
