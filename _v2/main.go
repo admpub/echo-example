@@ -9,6 +9,12 @@ import (
 	mw "github.com/admpub/echo/middleware"
 )
 
+type FormData struct {
+	User  string
+	Id    int
+	Email string
+}
+
 func main() {
 	engine := "fasthttp"
 
@@ -29,6 +35,11 @@ func main() {
 	}))
 	e.Post("/", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
+	}))
+	e.Post("/bind", echo.HandlerFunc(func(c echo.Context) error {
+		m := &FormData{}
+		c.Bind(m)
+		return c.String(200, "Bind data:\n"+fmt.Sprintf("%+v", m))
 	}))
 	e.Get("/v2", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "Echo v2")
