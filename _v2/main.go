@@ -6,6 +6,7 @@ import (
 	"github.com/admpub/echo"
 	"github.com/admpub/echo/engine/fasthttp"
 	"github.com/admpub/echo/engine/standard"
+	"github.com/admpub/echo/handler"
 	mw "github.com/admpub/echo/middleware"
 )
 
@@ -58,6 +59,11 @@ func main() {
 	e.Get("/ping", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "pong")
 	}))
+	e.Get("/static/*", &handler.Static{
+		Root:   `static`,
+		Browse: true,
+		Index:  `index.html`,
+	})
 
 	// ==========================
 	// 创建子路由
