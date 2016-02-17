@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	engine := "default"
+	engine := "fasthttp"
 
 	e := echo.New()
 	e.Use(echo.MiddlewareFunc(func(h echo.Handler) echo.Handler {
@@ -35,6 +35,16 @@ func main() {
 	}))
 	e.Get("/ping", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "pong")
+	}))
+	g := e.Group("/admin")
+	g.Get("", echo.HandlerFunc(func(c echo.Context) error {
+		return c.String(200, "Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
+	}))
+	g.Post("", echo.HandlerFunc(func(c echo.Context) error {
+		return c.String(200, "Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
+	}))
+	g.Get("/ping", echo.HandlerFunc(func(c echo.Context) error {
+		return c.String(200, "pong -- Group")
 	}))
 
 	switch engine {
