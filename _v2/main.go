@@ -28,6 +28,8 @@ func main() {
 			fmt.Println(`==========before===========`)
 			err := h.Handle(c)
 			fmt.Println(`===========after===========`)
+			fmt.Println(`===========response content:`)
+			fmt.Println(string(c.Response().Body()))
 			return err
 		})
 	}))
