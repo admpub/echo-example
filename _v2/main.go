@@ -19,6 +19,10 @@ func main() {
 	engine := "fasthttp"
 
 	e := echo.New()
+
+	// ==========================
+	// 添加中间价
+	// ==========================
 	e.Use(echo.MiddlewareFunc(func(h echo.Handler) echo.Handler {
 		return echo.HandlerFunc(func(c echo.Context) error {
 			fmt.Println(`==========before===========`)
@@ -27,9 +31,14 @@ func main() {
 			return err
 		})
 	}))
+
 	e.Use(mw.Log())
 	e.Use(mw.Recover())
 	e.Use(mw.Gzip())
+
+	// ==========================
+	// 设置路由
+	// ==========================
 	e.Get("/", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
 	}))
@@ -47,6 +56,10 @@ func main() {
 	e.Get("/ping", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "pong")
 	}))
+
+	// ==========================
+	// 创建子路由
+	// ==========================
 	g := e.Group("/admin")
 	g.Get("", echo.HandlerFunc(func(c echo.Context) error {
 		return c.String(200, "Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
@@ -58,6 +71,9 @@ func main() {
 		return c.String(200, "pong -- Group")
 	}))
 
+	// ==========================
+	// 启动服务
+	// ==========================
 	switch engine {
 
 	case "fasthttp":
