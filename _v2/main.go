@@ -13,6 +13,14 @@ func main() {
 	engine := "default"
 
 	e := echo.New()
+	e.Use(echo.MiddlewareFunc(func(h echo.Handler) echo.Handler {
+		return echo.HandlerFunc(func(c echo.Context) error {
+			fmt.Println(`==========before===========`)
+			err := h.Handle(c)
+			fmt.Println(`===========after===========`)
+			return err
+		})
+	}))
 	e.Use(mw.Log())
 	e.Use(mw.Recover())
 	//e.Use(mw.Gzip())
