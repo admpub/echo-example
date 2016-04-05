@@ -3,11 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/admpub/echo"
-	"github.com/admpub/echo/engine/fasthttp"
-	"github.com/admpub/echo/engine/standard"
-	"github.com/admpub/echo/handler"
-	mw "github.com/admpub/echo/middleware"
+	"github.com/webx-top/echo"
+	"github.com/webx-top/echo/engine/fasthttp"
+	"github.com/webx-top/echo/engine/standard"
+	mw "github.com/webx-top/echo/middleware"
 )
 
 type FormData struct {
@@ -20,7 +19,7 @@ func main() {
 	engine := "fasthttp"
 
 	e := echo.New()
-
+	e.SetDebug(true)
 	// ==========================
 	// 添加中间价
 	// ==========================
@@ -42,42 +41,37 @@ func main() {
 	// ==========================
 	// 设置路由
 	// ==========================
-	e.Get("/", echo.HandlerFunc(func(c echo.Context) error {
+	e.Get("/", func(c echo.Context) error {
 		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
-	}))
-	e.Post("/", echo.HandlerFunc(func(c echo.Context) error {
+	})
+	e.Post("/", func(c echo.Context) error {
 		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
-	}))
-	e.Post("/bind", echo.HandlerFunc(func(c echo.Context) error {
+	})
+	e.Post("/bind", func(c echo.Context) error {
 		m := &FormData{}
 		c.Bind(m)
 		return c.String(200, "Bind data:\n"+fmt.Sprintf("%+v", m))
-	}))
-	e.Get("/v2", echo.HandlerFunc(func(c echo.Context) error {
+	})
+	e.Get("/v2", func(c echo.Context) error {
 		return c.String(200, "Echo v2")
-	}))
-	e.Get("/ping", echo.HandlerFunc(func(c echo.Context) error {
+	})
+	e.Get("/ping", func(c echo.Context) error {
 		return c.String(200, "pong")
-	}))
-	e.Get("/static/*", &handler.Static{
-		Root:   `static`,
-		Browse: true,
-		Index:  `index.html`,
 	})
 
 	// ==========================
 	// 创建子路由
 	// ==========================
 	g := e.Group("/admin")
-	g.Get("", echo.HandlerFunc(func(c echo.Context) error {
+	g.Get("", func(c echo.Context) error {
 		return c.String(200, "Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
-	}))
-	g.Post("", echo.HandlerFunc(func(c echo.Context) error {
+	})
+	g.Post("", func(c echo.Context) error {
 		return c.String(200, "Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
-	}))
-	g.Get("/ping", echo.HandlerFunc(func(c echo.Context) error {
+	})
+	g.Get("/ping", func(c echo.Context) error {
 		return c.String(200, "pong -- Group")
-	}))
+	})
 
 	// ==========================
 	// 启动服务
