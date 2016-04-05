@@ -23,7 +23,7 @@ func main() {
 	// ==========================
 	// 添加中间价
 	// ==========================
-	e.Use(echo.WrapMiddleware(func(h echo.Handler) echo.HandlerFunc {
+	e.Use(func(h echo.Handler) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			fmt.Println(`==========before===========`)
 			err := h.Handle(c)
@@ -32,7 +32,7 @@ func main() {
 			fmt.Println(string(c.Response().Body()))
 			return err
 		}
-	}))
+	})
 
 	e.Use(mw.Log())
 	e.Use(mw.Recover())
