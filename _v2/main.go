@@ -61,7 +61,7 @@ func main() {
 	})
 	e.Get("/std", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`standard net/http handleFunc`))
-		w.WriteHeader(500)
+		w.WriteHeader(200)
 	})
 
 	// ==========================
