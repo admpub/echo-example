@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/engine/fasthttp"
@@ -57,6 +58,10 @@ func main() {
 	})
 	e.Get("/ping", func(c echo.Context) error {
 		return c.String(200, "pong")
+	})
+	e.Get("/std", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`standard net/http handleFunc`))
+		w.WriteHeader(500)
 	})
 
 	// ==========================
