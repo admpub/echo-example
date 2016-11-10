@@ -22,7 +22,7 @@ func main() {
 	e := echo.New()
 	e.SetDebug(true)
 	// ==========================
-	// 添加中间价
+	// 添加中间件
 	// ==========================
 	e.Use(func(h echo.Handler) echo.HandlerFunc {
 		return func(c echo.Context) error {
