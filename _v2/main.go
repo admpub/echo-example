@@ -92,10 +92,15 @@ func main() {
 	// ==========================
 
 	// GET (URL: http://localhost:4444/admin)
-	g := e.Group("/admin")
+	beforeMiddleware2:=func(c echo.Context)error{
+		fmt.Println(`--------> beforeMiddleware2`)
+		return nil
+	}
+	g := e.Group("/admin",beforeMiddleware)
 	g.Get("", func(c echo.Context) error {
+		fmt.Println(`--------> Group`)
 		return c.String(200, "Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
-	})
+	},beforeMiddleware2) //beforeMiddleware2 -> beforeMiddleware -> handler
 
 	// POST (URL: http://localhost:4444/admin)
 	g.Post("", func(c echo.Context) error {
