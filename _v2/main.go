@@ -67,9 +67,14 @@ func main() {
 	})
 
 	// v2 (URL: http://localhost:4444/v2)
+	beforeMiddleware:=func(c echo.Context)error{
+		fmt.Println(`--------> beforeMiddleware`)
+		return nil
+	}
 	e.Get("/v2", func(c echo.Context) error {
+		fmt.Println(`--------> v2`)
 		return c.String(200, "Echo v2")
-	})
+	},beforeMiddleware)
 
 	// ping (URL: http://localhost:4444/ping)
 	e.Get("/ping", func(c echo.Context) error {
