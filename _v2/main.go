@@ -73,6 +73,16 @@ func main() {
 			return nil
 		}
 	}
+	/*
+	beforeMiddleware:=func(flag string) func(echo.Handler) echo.HandlerFunc {
+		return func(h echo.Handler) echo.HandlerFunc {
+			return func(c echo.Context) error {
+				fmt.Println(`--------> beforeMiddleware2:`+flag)
+				return h.Handle(c)
+			}
+		}
+	}
+	*/
 	e.Get("/v2", func(c echo.Context) error {
 		fmt.Println(`--------> v2`)
 		return c.String(200, "Echo v2")
