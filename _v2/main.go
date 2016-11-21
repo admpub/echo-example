@@ -53,17 +53,17 @@ func main() {
 
 	// 首页 (URL: http://localhost:4444/)
 	e.Get("/", func(c echo.Context) error {
-		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
+		return c.String("Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
 	})
 	e.Post("/", func(c echo.Context) error {
-		return c.String(200, "Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
+		return c.String("Hello, World!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
 	})
 
 	// Bind (URL: http://localhost:4444/bind)
 	e.Post("/bind", func(c echo.Context) error {
 		m := &FormData{}
 		c.Bind(m)
-		return c.String(200, "Bind data:\n"+fmt.Sprintf("%+v", m))
+		return c.String("Bind data:\n"+fmt.Sprintf("%+v", m))
 	})
 
 	// v2 (URL: http://localhost:4444/v2)
@@ -85,12 +85,12 @@ func main() {
 	*/
 	e.Get("/v2", func(c echo.Context) error {
 		fmt.Println(`--------> v2`)
-		return c.String(200, "Echo v2")
+		return c.String("Echo v2")
 	},beforeMiddleware(``))
 
 	// ping (URL: http://localhost:4444/ping)
 	e.Get("/ping", func(c echo.Context) error {
-		return c.String(200, "pong")
+		return c.String("pong")
 	})
 	
 	// Stdlib handler (URL: http://localhost:4444/std)
@@ -107,17 +107,17 @@ func main() {
 	g := e.Group("/admin",beforeMiddleware(`02`),beforeMiddleware(`01`))
 	g.Get("", func(c echo.Context) error {
 		fmt.Println(`--------> In group handler`)
-		return c.String(200, "Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
+		return c.String("Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
 	},beforeMiddleware(`2`),beforeMiddleware(`1`)) //beforeMiddleware01 -> beforeMiddleware02 -> beforeMiddleware1 -> beforeMiddleware2 -> handler
 
 	// POST (URL: http://localhost:4444/admin)
 	g.Post("", func(c echo.Context) error {
-		return c.String(200, "Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
+		return c.String("Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
 	})
 
 	// (URL: http://localhost:4444/admin/ping)
 	g.Get("/ping", func(c echo.Context) error {
-		return c.String(200, "pong -- Group")
+		return c.String("pong -- Group")
 	})
 
 	// ==========================
