@@ -86,7 +86,7 @@ func main() {
 	e.Get("/v2", func(c echo.Context) error {
 		fmt.Println(`--------> v2`)
 		return c.String("Echo v2")
-	},beforeMiddleware(``))
+	},beforeMiddleware(`1`),beforeMiddleware(`2`)) //beforeMiddleware1 -> beforeMiddleware2 -> handler
 
 	// ping (URL: http://localhost:4444/ping)
 	e.Get("/ping", func(c echo.Context) error {
@@ -104,11 +104,11 @@ func main() {
 	// ==========================
 
 	// GET (URL: http://localhost:4444/admin)
-	g := e.Group("/admin",beforeMiddleware(`02`),beforeMiddleware(`01`))
+	g := e.Group("/admin",beforeMiddleware(`01`),beforeMiddleware(`02`))
 	g.Get("", func(c echo.Context) error {
 		fmt.Println(`--------> In group handler`)
 		return c.String("Hello, Group!\n"+fmt.Sprintf("%+v", c.Request().Form().All()))
-	},beforeMiddleware(`2`),beforeMiddleware(`1`)) //beforeMiddleware01 -> beforeMiddleware02 -> beforeMiddleware1 -> beforeMiddleware2 -> handler
+	},beforeMiddleware(`1`),beforeMiddleware(`2`)) //beforeMiddleware01 -> beforeMiddleware02 -> beforeMiddleware1 -> beforeMiddleware2 -> handler
 
 	// POST (URL: http://localhost:4444/admin)
 	g.Post("", func(c echo.Context) error {
