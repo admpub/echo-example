@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/webx-top/echo"
+	"github.com/webx-top/echo/engine"
 	"github.com/webx-top/echo/engine/fasthttp"
 	"github.com/webx-top/echo/engine/standard"
 	mw "github.com/webx-top/echo/middleware"
@@ -17,7 +18,7 @@ type FormData struct {
 }
 
 func main() {
-	engine := "fasthttp2"
+	eng := "fasthttp"
 
 	e := echo.New()
 	e.SetDebug(true)
@@ -121,18 +122,24 @@ func main() {
 		return c.String("pong -- Group")
 	})
 
+	c := &engine.Config{
+		Address:     ":4444",
+		TLSAuto:     false,
+		TLSCertFile: "cert.pem",
+		TLSKeyFile:  "key.pem",
+	}
 	// ==========================
 	// 启动服务
 	// ==========================
-	switch engine {
+	switch eng {
 
 	case "fasthttp":
 		// FastHTTP
-		e.Run(fasthttp.New(":4444"))
+		e.Run(fasthttp.NewWithConfig(c))
 
 	default:
 		// Standard
-		e.Run(standard.New(":4444"))
+		e.Run(standard.NewWithConfig(c))
 
 	}
 
