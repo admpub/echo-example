@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/webx-top/echo"
-	"github.com/webx-top/echo/engine"
 	"github.com/webx-top/echo/engine/fasthttp"
 	"github.com/webx-top/echo/engine/standard"
 	mw "github.com/webx-top/echo/middleware"
@@ -18,7 +17,7 @@ type FormData struct {
 }
 
 func main() {
-	eng := "fasthttp"
+	engine := "fasthttp2"
 
 	e := echo.New()
 	e.SetDebug(true)
@@ -29,6 +28,7 @@ func main() {
 	e.Use(func(h echo.Handler) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			fmt.Println(`==========before===========`)
+			c.Response().SetKeepBody(true)
 			err := h.Handle(c)
 			fmt.Println(`===========after===========`)
 			fmt.Println(`===========response content:`)
@@ -121,24 +121,18 @@ func main() {
 		return c.String("pong -- Group")
 	})
 
-	c := &engine.Config{
-		Address:     ":4444",
-		TLSAuto:     false,
-		TLSCertFile: "cert.pem",
-		TLSKeyFile:  "key.pem",
-	}
 	// ==========================
 	// 启动服务
 	// ==========================
-	switch eng {
+	switch engine {
 
 	case "fasthttp":
 		// FastHTTP
-		e.Run(fasthttp.NewWithConfig(c))
+		e.Run(fasthttp.New(":4444"))
 
 	default:
 		// Standard
-		e.Run(standard.NewWithConfig(c))
+		e.Run(standard.New(":4444"))
 
 	}
 
