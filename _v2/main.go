@@ -28,7 +28,7 @@ func main() {
 	e.Use(func(h echo.Handler) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			fmt.Println(`==========before===========`)
-			c.Response().SetKeepBody(true)
+			c.Response().KeepBody(true)
 			err := h.Handle(c)
 			fmt.Println(`===========after===========`)
 			fmt.Println(`===========response content:`)
